@@ -69,8 +69,8 @@ function BlockAuthorsBase ({ children }: Props): React.ReactElement<Props> {
           const blockOneHash = (await api.query.system.blockHash(1));
           const blockOneHashRef = window.localStorage.getItem('blockOneHash');
 
-          console.log(blockOneHash.toString());
-          console.log(blockOneHashRef);
+          // console.log(blockOneHash.toString());
+          // console.log(blockOneHashRef);
 
           if (
             chainName === 'Development' &&

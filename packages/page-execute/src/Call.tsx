@@ -6,16 +6,18 @@ import { Button, ContractParams, Dropdown, IconLink, InputAddress, InputBalance,
 import { useAccountId, useAccountInfo, useApi, useFormField, useGasWeight } from '@canvas-ui/react-hooks';
 import { useTxParams } from '@canvas-ui/react-params';
 import { extractValues } from '@canvas-ui/react-params/values';
+import { EventsContext } from '@canvas-ui/react-query/Events';
 import usePendingTx from '@canvas-ui/react-signer/usePendingTx';
 import { getContractForAddress } from '@canvas-ui/react-util';
 import BN from 'bn.js';
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useMemo, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import styled from 'styled-components';
 
 import { ContractPromise as Contract } from '@polkadot/api-contract';
-import { BN_ZERO, isNull } from '@polkadot/util';
+import { BN_ZERO, isNull, u8aToString } from '@polkadot/util';
 
+import Events from './Events';
 import Outcome from './Outcome';
 import { useTranslation } from './translate';
 import { CallResult } from './types';
@@ -190,10 +192,26 @@ function Call ({ className, navigateTo }: Props): React.ReactElement<Props> | nu
     }),
     [contract?.registry, name, messageOptions, messageIndex, params, values, weightToString]
   );
+  const events = useContext(EventsContext);
+
+  console.log('Event array length', events.length);
+  events.forEach(event => {
+    const message = event.record.topics.map(u8aToString).find((topic: string, index: number) => {
+      // console.log(topic.includes('::'), index);
+
+      return topic.includes('::');
+    });
+
+    console.log(message);
+    console.log(event.record.toHuman());
+    console.log(event.record.event.toHuman());
+  });
 
   if (isNull(contract) || isNull(messageIndex) || !contract?.abi?.messages[messageIndex]) {
     return null;
   }
+
+  // console.log(contract.abi.messages[messageIndex]);
 
   return (
     <PendingTx
@@ -295,6 +313,11 @@ function Call ({ className, navigateTo }: Props): React.ReactElement<Props> | nu
 
           </Button.Group>
         </section>
+        {/* <Events
+          events={events}
+          message={contract.abi.messages[messageIndex]}
+          registry={contract.registry}
+        /> */}
         {outcomes.length > 0 && (
           <footer>
             <h3>

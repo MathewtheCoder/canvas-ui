@@ -68,6 +68,7 @@ export { default as ScrollToTop } from './ScrollToTop';
 export { default as Spinner } from './Spinner';
 export { default as Static } from './Static';
 export { default as Status, StatusContext } from './Status';
+export { default as Table } from './Table';
 export { default as Tag } from './Tag';
 export { default as Tags } from './Tags';
 export { default as Toggle } from './Toggle';

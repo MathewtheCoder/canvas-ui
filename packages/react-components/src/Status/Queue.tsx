@@ -34,7 +34,7 @@ const SUBMIT_RPC = jsonrpc.author.submitAndWatchExtrinsic;
 function mergeStatus (status: ActionStatus[]): ActionStatus[] {
   return status
     .reduce((result: StatusCount[], status): StatusCount[] => {
-      const prev = result.find(({ status: prev }) => prev.action === status.action && prev.status === status.status);
+      const prev = result.find(({ status: prev }) => prev.action !== 'contracts.ContractExecution' && prev.action === status.action && prev.status === status.status);
 
       if (prev) {
         prev.count++;
